@@ -6,13 +6,14 @@ resource "aws_instance" "jenkins" {
     "Name" : "Jenkins"
     "Application" : "Jenkins"
   }
-  user_data = file("./scripts/jenkinsInstall.sh")
-  security_groups = [aws_security_group.jenkins_sg.name]
+  user_data            = file("./scripts/jenkinsInstall.sh")
+  security_groups      = [aws_security_group.jenkins_sg.name]
+  iam_instance_profile = aws_iam_instance_profile.jenkns_instace_profile.name
 }
 
 # Security group
 resource "aws_security_group" "jenkins_sg" {
-  name = "jenkins_sg"
+  name        = "jenkins_sg"
   description = "Allow port 8080 inbound and all outbound"
   tags = {
     Name : "Jenkins_SG"
@@ -22,15 +23,15 @@ resource "aws_security_group" "jenkins_sg" {
 # Security group outbound rule
 resource "aws_vpc_security_group_ingress_rule" "allow_8080" {
   security_group_id = aws_security_group.jenkins_sg.id
-  cidr_ipv4 = "0.0.0.0/0"
-  from_port = "8080"
-  to_port = "8080"
-  ip_protocol = "tcp"
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = "8080"
+  to_port           = "8080"
+  ip_protocol       = "tcp"
 }
 
 # Security group outbound rule
 resource "aws_vpc_security_group_egress_rule" "allow_all" {
   security_group_id = aws_security_group.jenkins_sg.id
-  cidr_ipv4 = "0.0.0.0/0"
-  ip_protocol = "-1"
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
 }

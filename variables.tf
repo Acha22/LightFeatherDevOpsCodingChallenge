@@ -1,7 +1,7 @@
 variable "ami" {
   type = map(string)
   default = {
-    "debian"       = "ami-0779caf41f9ba54f0"
+    "debian" = "ami-0779caf41f9ba54f0"
   }
 }
 
